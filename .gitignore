@@ -1,0 +1,46 @@
+*.log
+errors/
+sessions/
+uploads/
+databases/
+
+# Ignore any SQLite databases
+*.db
+
+#Ignore virtualenv
+flask-env/
+
+# Dropbox
+.dropbox
+
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+build
+eggs
+parts
+var
+sdist
+develop-eggs
+.installed.cfg
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject

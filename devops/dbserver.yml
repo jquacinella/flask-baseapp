@@ -1,0 +1,54 @@
+---
+
+- hosts: dbservers
+  sudo: True
+  user: vagrant
+
+  tasks:
+    - name: update apt
+      action: command /usr/bin/apt-get update
+
+    # This is necessary due to the box that is being used having an odd sudoers file
+    - name: update sudoers
+      action: copy src=templates/sudoers dest=/etc/sudoers
+
+    - name: install db server packages
+      action: apt pkg=$item state=present
+      with_items:
+        - postgresql
+        - postgresql-contrib
+        - libpq-dev
+        - python-dev
+        - python-setuptools
+
+    - name: install python libraries
+      action: easy_install name=psycopg2==2.4.5
+
+    - name: add postgres user to admin group
+      action: user name=postgres groups=admin append=yes
+
+    - name: update postgres db configuration
+      action: copy src=templates/postgresql.conf dest=/etc/postgresql/9.1/main/postgresql.conf
+      notify:
+        - restart postgresql
+
+    - name: update postgres client configuration
+      action: copy src=templates/pg_hba.conf dest=/etc/postgresql/9.1/main/pg_hba.conf
+      notify:
+        - restart postgresql
+
+  handlers:
+    - name: restart postgresql
+      action: service name=postgresql state=restarted
+
+- hosts: dbservers
+  sudo: True
+  user: vagrant
+  sudo_user: postgres
+
+  tasks:
+    - name: create a test database user
+      action: postgresql_user user=vagrant password=password
+
+    - name: create test database
+      action: postgresql_db name=vagrant_ansible_tutorial owner=vagrant

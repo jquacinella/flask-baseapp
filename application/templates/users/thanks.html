@@ -1,0 +1,5 @@
+{% block content %}
+<h2>Thank You!</h2>
+
+<p>Thanks for registering <strong>{{ user.email }}</strong>! You can now view your <a href="{{ url_for('users.profile') }}">profile page</a></p>
+{% endblock %}

@@ -1,0 +1,1 @@
+# Setup any custom exception classes here
